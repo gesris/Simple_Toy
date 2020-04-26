@@ -1,5 +1,6 @@
-import tensorflow as tf
-tf.set_random_seed(1234)
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+#tf.set_random_seed(1234)
 import numpy as np
 np.random.seed(1234)
 import matplotlib.pyplot as plt
@@ -13,9 +14,17 @@ import myutils
 def normal_distribution(mean, cov, n):
     return np.random.multivariate_normal(mean, cov, n)
 
-mean = [[- 0.5, 0.5], [0.5, -0.5]]           # [Signal, Background]
-cov = [[[1, 0], [0, 1]], [[1, 0], [0, 1]]]  # [Signal, Background]
-n = [10000, 10000]                          # [Signal, Background]
+#mean = [[- 0.5, 0.5], [0.5, -0.5]]           # [Signal, Background]
+sx = float(input("Signal Mean X: "))
+sy = float(input("Signal Mean Y: "))
+bx = float(input("Background Mean X: "))
+by = float(input("Background Mean Y: "))
+n_s = int(input("Number of Signal Events: "))
+n_b = int(input("Number of Background Events: "))
+
+mean = [[sx, sy], [bx, by]]
+cov = [[[2, 0], [0,2]], [[2, 0], [0, 2]]]  # [Signal, Background]
+n = [n_s, n_b]                          # [Signal, Background]
 
 bins_for_plots = [0.0, 0.5, 1.0]
 bins_for_plots_middle = []
@@ -67,15 +76,15 @@ def linear_function(x, magnitude, bias):
 graph_limit = [-10, 10]
 lin_func = linear_function(np.linspace(graph_limit[0],graph_limit[1],200), magnitude, bias)
 
-plt.figure(figsize=(6,6))
-plt.plot([lin_func[0], lin_func[-1]], [graph_limit[0], graph_limit[1]])
-plt.plot([mean[0][0], mean[1][0]], [mean[0][1], mean[1][1]])
-plt.plot(mean[0][0],mean[0][1],'ro')
-plt.plot(mean[1][0], mean[1][1], 'ro')
-plt.xlim(-3, 3)
-plt.ylim(-3, 3)
+#plt.figure(figsize=(6,6))
+#plt.plot([lin_func[0], lin_func[-1]], [graph_limit[0], graph_limit[1]])
+#plt.plot([mean[0][0], mean[1][0]], [mean[0][1], mean[1][1]])
+#plt.plot(mean[0][0],mean[0][1],'ro')
+#plt.plot(mean[1][0], mean[1][1], 'ro')
+#plt.xlim(-3, 3)
+#plt.ylim(-3, 3)
 #plt.savefig("/home/risto/Masterarbeit/Python/significance_plots/magnitude_bias_plot_{}.png".format(picture_index), bbox_inches = "tight")
-plt.show()
+#plt.show()
 
 
 ####
@@ -91,15 +100,15 @@ plt.contour(hist_signal[0], extent= [hist_signal[1][0], hist_signal[1][-1], hist
 plt.contour(hist_background[0], extent= [hist_background[1][0], hist_background[1][-1], hist_background[2][0], hist_background[2][-1]], cmap= cmap_bkg)
 plt.plot([-999], [-999], color="C0", label="Signal")
 plt.plot([-999], [-999], color="C1", label="Background")
-plt.plot([lin_func[0], lin_func[-1]], [graph_limit[0], graph_limit[1]], color="C3", label="Maximum likelihood decision boundary")
+plt.plot([lin_func[0], lin_func[-1]], [graph_limit[0], graph_limit[1]], color="r", label="Maximum likelihood decision boundary")
 plt.xlabel("x")
 plt.ylabel("y")
 plt.xlim(limit[0], limit[1])
 plt.ylim(limit[0], limit[1])
-plt.text(3.5, -3, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
+#plt.text(3.5, -3, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
 plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=1, mode="expand", borderaxespad=0.)
 #plt.savefig("/home/risto/Masterarbeit/Python/significance_plots/signal_background_plot_{}.png".format(picture_index), bbox_inches = "tight")
-plt.show()
+#plt.show()
 
 ####
 #### Plot significance from maximum likelihood via Histogram
@@ -138,9 +147,9 @@ plt.title("Background Significance: {:.2f},   Signal Significance: {:.2f}".forma
 plt.xlabel("Projection with maximum likelihood decision boundary at {}".format(border))
 plt.ylabel("# Events")
 plt.axvline(x = border, ymin= 0, ymax= max(n[0], n[1]), color="r", linestyle= "dashed", lw=2)
-plt.text(1.1, 0, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
+#plt.text(1.1, 0, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
 #plt.savefig("/home/risto/Masterarbeit/Python/significance_plots/significance_hist_max_like_{}.png".format(picture_index), bbox_inches = "tight")
-plt.show()
+#plt.show()
 
 ####
 #### Input Variables for NN model in terms of signal / background events
@@ -216,9 +225,9 @@ plt.title("Background Significance: {:.2f},   Signal Significance: {:.2f}".forma
 plt.xlabel("Projection with decision boundary from NN at {}".format(border))
 plt.ylabel("# Events")
 plt.axvline(x = border, ymin= 0, ymax= max(n[0], n[1]), color="r", linestyle= "dashed", lw=2)
-plt.text(1.1, 0, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
+#plt.text(1.1, 0, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
 #plt.savefig("/home/risto/Masterarbeit/Python/significance_plots/significance_hist_NN_{}.png".format(picture_index), bbox_inches = "tight")
-plt.show()
+#plt.show()
 
 
 ####
@@ -249,10 +258,10 @@ plt.colorbar(cbar)
 plt.xlabel("x1")
 plt.ylabel("x2")
 plt.title("Neural network function")
-plt.text(4.8, -3, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
+#plt.text(4.8, -3, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
 plt.tight_layout()
 plt.xlim(limit[0], limit[1])
 plt.ylim(limit[0], limit[1])
-plt.plot([lin_func[0], lin_func[-1]], [graph_limit[0], graph_limit[1]], color="C3", label="Maximum likelihood decision boundary")
+plt.plot([lin_func[0], lin_func[-1]], [graph_limit[0], graph_limit[1]], color="r", label="Maximum likelihood decision boundary")
 #plt.savefig("/home/risto/Masterarbeit/Python/significance_plots/NN_function_{}.png".format(picture_index), bbox_inches = "tight")
 plt.show()

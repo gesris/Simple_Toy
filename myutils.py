@@ -1,5 +1,6 @@
-import tensorflow as tf
-tf.set_random_seed(1234)
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+#tf.set_random_seed(1234)
 import numpy as np
 np.random.seed(1234)
 
