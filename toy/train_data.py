@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 import myutils
 import global_variables
 import create_data
@@ -49,15 +50,23 @@ def training():
     
     opt_hist_sig, opt_hist_bkg = sess.run([hist_sig, hist_bkg], feed_dict={x_sig: create_data.normal_distribution(global_variables.mean[0], global_variables.cov[0], global_variables.n[0]), x_bkg: create_data.normal_distribution(global_variables.mean[1], global_variables.cov[1], global_variables.n[1])})
 
+    # Signal and background counts to create hist
     s = [opt_hist_sig[0], opt_hist_sig[1]]
     b = [opt_hist_bkg[0], opt_hist_bkg[1]]
-    opt_sig_significance = s[1] / tf.sqrt(s[1] + b[1])
-    opt_bkg_significance = b[0] / tf.sqrt(s[0] + b[0])
-    opt_total_significance = opt_sig_significance + opt_bkg_significance
 
-    return s, b
+    # NN Function to create plot
+    length = 2000
+    grid_size = np.linspace(-3, 3, length)
+    xx, yy = np.meshgrid(grid_size, grid_size, sparse=False)
+    grid = np.vstack([xx.reshape((length * length)), yy.reshape((length * length))]).T
+    nn_function = sess.run(f_sig, feed_dict={x_sig: grid})
+    nn_function = nn_function.reshape((length, length))
+    nn_decision_boundary = sess.run(f_sig, feed_dict={x_sig: grid})
+    nn_decision_boundary = nn_decision_boundary.reshape((length, length))
 
-s, b = training()
+    return s, b, nn_function, nn_decision_boundary
 
-pickle.dump([s, b],
-            open("./toy/training_data.pickle", "wb"))
+s, b, nn_function, nn_decision_boundary = training()
+
+pickle.dump([s, b, nn_function, nn_decision_boundary],
+            open("training_data.pickle", "wb"))

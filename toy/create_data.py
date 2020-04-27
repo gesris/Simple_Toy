@@ -52,4 +52,4 @@ hist_signal, hist_background, lin_func, graph_limit, weight_sig, weight_backgrou
 
 # Write dataset to file
 pickle.dump([hist_signal, hist_background, lin_func, graph_limit, weight_sig, weight_background],
-            open("./toy/initial_data.pickle", "wb"))
+            open("initial_data.pickle", "wb"))

@@ -26,6 +26,6 @@ def makeplot(hist_signal, hist_background, lin_func, graph_limit):
 
 # [hist_signal, hist_background, lin_func, graph_limit, weight_sig, weight_background]
 
-hist_signal, hist_background, lin_func, graph_limit, _, _ = pickle.load(open("./toy/initial_data.pickle", "rb"))
+hist_signal, hist_background, lin_func, graph_limit, _, _ = pickle.load(open("initial_data.pickle", "rb"))
 
 makeplot(hist_signal, hist_background, lin_func, graph_limit)

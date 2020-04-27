@@ -23,18 +23,18 @@ def makeplot(bins_for_plots_middle, s, b, bins_for_plots, n, signal_significance
 
 
 # plot histogram with maximum likelihood desicion boundary
-_, _, _, _, s, b = pickle.load(open("./toy/initial_data.pickle", "rb"))
-signal_significance = s[0] / np.sqrt(s[0] + b[0])      # index 0 = signal side
-background_significance = b[1] / np.sqrt(s[1] + b[1])  # index 1 = background side
+_, _, _, _, s_ml, b_ml = pickle.load(open("initial_data.pickle", "rb"))
+signal_significance = s_ml[0] / np.sqrt(s_ml[0] + b_ml[0])      # index 0 = signal side
+background_significance = b_ml[1] / np.sqrt(s_ml[1] + b_ml[1])  # index 1 = background side
 
-makeplot(global_variables.bins_for_plots_middle, s, b, global_variables.bins_for_plots, global_variables.n, signal_significance, background_significance, global_variables.border)
+makeplot(global_variables.bins_for_plots_middle, s_ml, b_ml, global_variables.bins_for_plots, global_variables.n, signal_significance, background_significance, global_variables.border)
 
 
 # plot histogram after training
-s, b = pickle.load(open("./toy/training_data.pickle", "rb"))
-opt_sig_significance = s[1] / np.sqrt(s[1] + b[1])
-opt_bkg_significance = b[0] / np.sqrt(s[0] + b[0])
+s_nn, b_nn, _, _ = pickle.load(open("training_data.pickle", "rb"))
+opt_sig_significance = s_nn[1] / np.sqrt(s_nn[1] + b_nn[1])
+opt_bkg_significance = b_nn[0] / np.sqrt(s_nn[0] + b_nn[0])
 opt_total_significance = opt_sig_significance + opt_bkg_significance
 
-makeplot(global_variables.bins_for_plots_middle, s, b, global_variables.bins_for_plots, global_variables.n, opt_sig_significance, opt_bkg_significance, global_variables.border)
+makeplot(global_variables.bins_for_plots_middle, s_nn, b_nn, global_variables.bins_for_plots, global_variables.n, opt_sig_significance, opt_bkg_significance, global_variables.border)
 

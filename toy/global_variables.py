@@ -23,3 +23,6 @@ cov = [s_cov, b_cov]
 #n = [n_s, n_b]  
 n = [10000, 10000]
 border = bins_for_plots[1]
+
+# Limit of Axes in plots
+limit = [-3, 3]
