@@ -23,7 +23,7 @@ n_s = int(input("Number of Signal Events: "))
 n_b = int(input("Number of Background Events: "))
 
 mean = [[sx, sy], [bx, by]]
-cov = [[[2, 0], [0,2]], [[2, 0], [0, 2]]]  # [Signal, Background]
+cov = [[[1, 0], [0, 1]], [[1, 0], [0, 1]]]  # [Signal, Background]
 n = [n_s, n_b]                          # [Signal, Background]
 
 bins_for_plots = [0.0, 0.5, 1.0]
