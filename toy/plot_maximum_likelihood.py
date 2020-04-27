@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib
+import global_variables
+import pickle
 
 def makeplot(hist_signal, hist_background, lin_func, graph_limit):
     
@@ -21,3 +23,9 @@ def makeplot(hist_signal, hist_background, lin_func, graph_limit):
     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=1, mode="expand", borderaxespad=0.)
     #plt.savefig("/home/risto/Masterarbeit/Python/significance_plots/signal_background_plot_{}.png".format(picture_index), bbox_inches = "tight")
     plt.show()
+
+# [hist_signal, hist_background, lin_func, graph_limit, weight_sig, weight_background]
+
+hist_signal, hist_background, lin_func, graph_limit, _, _ = pickle.load(open("./toy/initial_data.pickle", "rb"))
+
+makeplot(hist_signal, hist_background, lin_func, graph_limit)

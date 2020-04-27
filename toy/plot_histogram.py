@@ -1,7 +1,10 @@
 #import numpy as np
 #np.random.seed(1234)
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+import global_variables
+import pickle
 
 def makeplot(bins_for_plots_middle, s, b, bins_for_plots, n, signal_significance, background_significance, border):
     plt.figure(figsize=(7, 6))
@@ -17,3 +20,21 @@ def makeplot(bins_for_plots_middle, s, b, bins_for_plots, n, signal_significance
     #plt.text(1.1, 0, "\t \t Signal \t Background \n \n Mean: \t {} \t     {} \n n: \t    {} \t        {} \n Cov: \t  {}    {} \n \n Decision boundary: \t {}".format(mean[0], mean[1], n[0], n[1], cov[0], cov[1], border).expandtabs(), fontsize= 12, bbox=dict(facecolor='grey', alpha=0.3))
     #plt.savefig("/home/risto/Masterarbeit/Python/significance_plots/significance_hist_max_like_{}.png".format(picture_index), bbox_inches = "tight")
     plt.show()
+
+
+# plot histogram with maximum likelihood desicion boundary
+_, _, _, _, s, b = pickle.load(open("./toy/initial_data.pickle", "rb"))
+signal_significance = s[0] / np.sqrt(s[0] + b[0])      # index 0 = signal side
+background_significance = b[1] / np.sqrt(s[1] + b[1])  # index 1 = background side
+
+makeplot(global_variables.bins_for_plots_middle, s, b, global_variables.bins_for_plots, global_variables.n, signal_significance, background_significance, global_variables.border)
+
+
+# plot histogram after training
+s, b = pickle.load(open("./toy/training_data.pickle", "rb"))
+opt_sig_significance = s[1] / np.sqrt(s[1] + b[1])
+opt_bkg_significance = b[0] / np.sqrt(s[0] + b[0])
+opt_total_significance = opt_sig_significance + opt_bkg_significance
+
+makeplot(global_variables.bins_for_plots_middle, s, b, global_variables.bins_for_plots, global_variables.n, opt_sig_significance, opt_bkg_significance, global_variables.border)
+

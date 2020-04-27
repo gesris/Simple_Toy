@@ -2,6 +2,7 @@ import tensorflow as tf
 import myutils
 import global_variables
 import create_data
+import pickle
 
 def training():
     # variables have to be defined before start of tf.session()!
@@ -48,9 +49,15 @@ def training():
     
     opt_hist_sig, opt_hist_bkg = sess.run([hist_sig, hist_bkg], feed_dict={x_sig: create_data.normal_distribution(global_variables.mean[0], global_variables.cov[0], global_variables.n[0]), x_bkg: create_data.normal_distribution(global_variables.mean[1], global_variables.cov[1], global_variables.n[1])})
 
+    s = [opt_hist_sig[0], opt_hist_sig[1]]
+    b = [opt_hist_bkg[0], opt_hist_bkg[1]]
     opt_sig_significance = s[1] / tf.sqrt(s[1] + b[1])
     opt_bkg_significance = b[0] / tf.sqrt(s[0] + b[0])
     opt_total_significance = opt_sig_significance + opt_bkg_significance
 
-    return [opt_hist_sig[0], opt_hist_sig[1]], [opt_hist_bkg[0], opt_hist_bkg[1]], opt_sig_significance, opt_bkg_significance, opt_total_significance
+    return s, b
 
+s, b = training()
+
+pickle.dump([s, b],
+            open("./toy/training_data.pickle", "wb"))

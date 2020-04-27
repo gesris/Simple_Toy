@@ -1,5 +1,7 @@
 import numpy as np
 np.random.seed(1234)
+import pickle
+import global_variables
 
 def normal_distribution(mean, cov, n):
     return np.random.multivariate_normal(mean, cov, n)
@@ -46,4 +48,8 @@ def create_initial_data(mean, cov, n):
 
     return hist_signal, hist_background, lin_func, graph_limit, num_sig(signal), num_sig(background)
 
+hist_signal, hist_background, lin_func, graph_limit, weight_sig, weight_background = create_initial_data(global_variables.mean, global_variables.cov, global_variables.n)
 
+# Write dataset to file
+pickle.dump([hist_signal, hist_background, lin_func, graph_limit, weight_sig, weight_background],
+            open("./toy/initial_data.pickle", "wb"))
