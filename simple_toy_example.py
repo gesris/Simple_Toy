@@ -6,6 +6,7 @@ np.random.seed(1234)
 import matplotlib.pyplot as plt
 import matplotlib
 import myutils
+#import global_variables
 
 ####
 #### Global Variables
@@ -119,8 +120,6 @@ plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=1, mode="expand", bo
 # bei denen der Y-Wert > X-Wert ist -> aus Maximum Likelihood
 #magnitude * (x - bias[1]) + bias[0]
 def num_sig(x):
-    #return [np.sum(x[1] > magnitude * (x[0] - bias[1]) + bias[0]), np.sum(x[1] < magnitude * (x[0] - bias[1]) + bias[0])]
-    #return [np.sum(x[1] > x[0]), np.sum(x[1] < x[0])]
     if magnitude == 0:
         return [np.sum((x[0] - bias[0]) < 0), np.sum((x[0] - bias[0]) > 0)]
     else:
@@ -141,8 +140,6 @@ plt.figure(figsize=(7, 6))
 plt.hist(bins_for_plots_middle, weights= [s[1], s[0]], bins= bins_for_plots, histtype="step", lw=2, label="Signal")
 plt.hist(bins_for_plots_middle, weights= [b[1], b[0]], bins= bins_for_plots, histtype="step", lw=2, label="Backgorund")
 plt.legend(loc= "lower center")
-#plt.text(0.56, 7000, "Signal side of decision boundary", fontsize= 8)
-#plt.text(0.03, 7000, "Background side of decision boundary", fontsize= 8)
 plt.title("Background Significance: {:.2f},   Signal Significance: {:.2f}".format(background_significance, signal_significance))
 plt.xlabel("Projection with maximum likelihood decision boundary at {}".format(border))
 plt.ylabel("# Events")
@@ -219,8 +216,6 @@ plt.figure(figsize=(7, 6))
 plt.hist(bins_for_plots_middle, weights= [s[0], s[1]], bins= bins_for_plots, histtype="step", label="Signal", lw=2)
 plt.hist(bins_for_plots_middle, weights= [b[0], b[1]], bins= bins_for_plots, histtype="step", label="Backgorund", lw=2)
 plt.legend(loc= "lower center")
-#plt.text(0.56, 7000, "Signal side of decision boundary", fontsize= 8)
-#plt.text(0.02, 7000, "Background side of decision boundary", fontsize= 8)
 plt.title("Background Significance: {:.2f},   Signal Significance: {:.2f}".format(opt_bkg_significance, opt_sig_significance))
 plt.xlabel("Projection with decision boundary from NN at {}".format(border))
 plt.ylabel("# Events")
