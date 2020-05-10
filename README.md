@@ -1,4 +1,4 @@
-# Simple_Toy
+## Simple Toy
 
 Simple use of TF1 to separate signal from background by creating a NN model and optimizing the weights and biases regarding
 significance. 
